@@ -25,7 +25,7 @@ SECRET_KEY = 'p#gqcqcrl7k6uiz_*q9ie+j6@6-yi0_(50ybiuy3xizi%dh-1_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    "channels",
+    "realtime"
 ]
 
 MIDDLEWARE = [
@@ -122,3 +125,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(os.environ['ELASTICACHE_HOSTNAME'], 6379)],
+        },
+        "ROUTING": "realtime.routing.channel_routing",
+    },
+}
